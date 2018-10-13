@@ -1,25 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import firebase from './confic/firebase'; 
 
+
+var provider = new firebase.auth.FacebookAuthProvider();
 class App extends Component {
+
+  constructor() {
+    super()
+    
+    this.state = {
+      coords : null
+    }
+    this.login = this.login.bind(this)
+  }
+  componentDidMount(){
+    firebase.auth().createUserWithEmailAndPassword('uzair@pakao.com','uzair123').then(console.log('hogaya'))
+  
+  }
+  login() {
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      var user = result.user;
+      console.log('login hogaya',result)
+    }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+      // ...
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <button onClick={this.login}>Facebook L0gin</button>
       </div>
     );
   }
