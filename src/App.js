@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import firebase from './confic/firebase'; 
-
+import Login from './screen/login/login'
+import Profile from './screen/Profile/profile';
 
 var provider = new firebase.auth.FacebookAuthProvider();
 class App extends Component {
@@ -14,10 +15,10 @@ class App extends Component {
     }
     this.login = this.login.bind(this)
   }
-  componentDidMount(){
-    firebase.auth().createUserWithEmailAndPassword('uzair@pakao.com','uzair123').then(console.log('hogaya'))
+  // componentDidMount(){
+  //   firebase.auth().createUserWithEmailAndPassword('uzair@pakao.com','uzair123').then(console.log('hogaya'))
   
-  }
+  // }
   login() {
     firebase.auth().signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
@@ -35,7 +36,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <button onClick={this.login}>Facebook L0gin</button>
+        {/* <button onClick={this.login}>Facebook L0gin</button> */}
+         {/* <Login /> */}
+         <Profile />
       </div>
     );
   }

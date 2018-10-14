@@ -1,0 +1,36 @@
+.profileDiv{
+    /* display: flex; */
+    /* height: 60px; */
+    /* font-size: 20px; */
+    /* text-align: center; */
+    
+}
+.main h1{
+    /* flex-basis: 80%; */
+    flex-grow: 1
+}
+.main div{
+    /* flex-basis: 20%; */
+    /* flex-grow: 1 */
+    margin-right: 4em;
+    margin-top: 7px;
+}
+.main{
+    color: azure;
+    display: flex;
+    background-color: rgb(11, 50, 85);
+    flex-wrap: nowrap;
+    justify-content: center;
+    flex-basis: 100%;
+}
+.image{
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    background-color: rgb(246, 255, 127);
+    overflow: hidden
+}
+.image img{
+    width: 100%;
+    border-radius: 50%;
+}
