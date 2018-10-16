@@ -7,18 +7,27 @@ import Profile from './screen/Profile/profile';
 var provider = new firebase.auth.FacebookAuthProvider();
 class App extends Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     
     this.state = {
-      coords : null
+      coords : null,
+      user : false,
+      namae : false,
+      beverages : false,
+      pictures : false,
     }
     this.login = this.login.bind(this)
+    this.userLogin = this.userLogin.bind(this)
   }
-  // componentDidMount(){
-  //   firebase.auth().createUserWithEmailAndPassword('uzair@pakao.com','uzair123').then(console.log('hogaya'))
-  
-  // }
+  componentWillMount(){
+const login =  localStorage.getItem("login");
+if(login === "true"){
+  this.setState({
+    user : true,
+  })
+  }
+    }
   login() {
     firebase.auth().signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
@@ -32,13 +41,19 @@ class App extends Component {
       // ...
     });
   }
+ userLogin = () => {
+    this.setState({
+      user : true,
+    })
+  }
 
   render() {
+    const { user } = this.state;
     return (
       <div className="App">
         {/* <button onClick={this.login}>Facebook L0gin</button> */}
-         {/* <Login /> */}
-         <Profile />
+         {!user && <Login  userLogin = {this. userLogin} />}
+         {user && <Profile />}
       </div>
     );
   }

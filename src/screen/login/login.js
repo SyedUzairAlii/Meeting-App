@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import '../../App.css';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from '../../confic/firebase'
-
-
+import './login.css';
 class login extends Component {
 
     constructor() {
@@ -31,7 +30,9 @@ class login extends Component {
         callbacks: {
             // Avoid redirects after sign-in.
             signInSuccessWithAuthResult: (success) => { 
+                localStorage.setItem("login",true)
 
+                this.props.userLogin()
                 // console.log('sucess',success)
                 console.log('sucess',success.user.displayName)
                 console.log('sucess',success.user.email)
@@ -55,9 +56,23 @@ class login extends Component {
     }
     render() {
         return (
-          <div className="App">
+            <div className="App">
+             <div className="main">
+                     <h1>Meeting App
+</h1>
+                      
+             </div>
+             <br/>
+             <br/>
+             <br/>
+
+                     <div className="form">
+                         Login here
+                     <br/>
+                     <br/>
             
             <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
+                     </div>
           </div>
         );
       }
