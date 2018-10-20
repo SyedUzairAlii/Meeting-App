@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Cute from './cute.png'
 import firebase from '../../confic/firebase'
-import MyUploader from './imageuploder'
+import Bevrage from './bevrage'
+import Image from './imageuploder'
 
 class profile extends Component {
 
@@ -47,6 +48,22 @@ class profile extends Component {
         })
     }
     
+    pic = () => {
+     
+
+        this.props.dashboard()
+        this.setState({
+            pictures: true,
+            
+        })
+    }
+    beverages = () => {
+     
+        this.setState({
+            beverages: true,
+            
+        })
+    }
 
 
     render() {
@@ -74,7 +91,9 @@ class profile extends Component {
                     <br />
                     <button onClick={this.namee}>Next</button>
                 </form>}
-                {/* {nameField && !pictures && <MyUploader />} */}
+                {nameField && !pictures && <Image  pic = {this.pic}/> }
+                
+                {/* {nameField && pictures &&  !beverages &&<Bevrage  beverages = {this.beverages}/>} */}
             </div>
         )
     }

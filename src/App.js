@@ -3,7 +3,7 @@ import './App.css';
 import firebase from './confic/firebase'; 
 import Login from './screen/login/login'
 import Profile from './screen/Profile/profile';
-
+import Map from './screen/map/map'
 var provider = new firebase.auth.FacebookAuthProvider();
 class App extends Component {
 
@@ -13,12 +13,12 @@ class App extends Component {
     this.state = {
       coords : null,
       user : false,
-      namae : false,
-      beverages : false,
-      pictures : false,
+    
+      daashBoard: false,
     }
     this.login = this.login.bind(this)
     this.userLogin = this.userLogin.bind(this)
+    this.dashboard = this.dashboard.bind(this)
   }
   componentWillMount(){
 const login =  localStorage.getItem("login");
@@ -46,14 +46,19 @@ if(login === "true"){
       user : true,
     })
   }
-
+  dashboard = () => {
+    this.setState({
+      daashBoard : true,
+    })
+  }
   render() {
-    const { user } = this.state;
+    const { user ,daashBoard } = this.state;
     return (
       <div className="App">
         {/* <button onClick={this.login}>Facebook L0gin</button> */}
          {!user && <Login  userLogin = {this. userLogin} />}
-         {user && <Profile />}
+         {user && <Profile dashboard = {this. dashboard}/>}
+          {user &&  <Map/>}
       </div>
     );
   }
