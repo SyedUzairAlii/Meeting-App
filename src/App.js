@@ -3,7 +3,7 @@ import './App.css';
 import firebase from './confic/firebase'; 
 import Login from './screen/login/login'
 import Profile from './screen/Profile/profile';
-import Map from './screen/map/map'
+import Dashboard from './screen/dashboard/dashbboard'
 var provider = new firebase.auth.FacebookAuthProvider();
 class App extends Component {
 
@@ -13,18 +13,24 @@ class App extends Component {
     this.state = {
       coords : null,
       user : false,
-    
       daashBoard: false,
     }
     this.login = this.login.bind(this)
     this.userLogin = this.userLogin.bind(this)
-    this.dashboard = this.dashboard.bind(this)
+    // this.dashboard = this.dashboard.bind(this)
   }
   componentWillMount(){
 const login =  localStorage.getItem("login");
 if(login === "true"){
   this.setState({
     user : true,
+  })
+  }
+
+  const dashboard =  localStorage.getItem("dashboard");
+if(dashboard === "true"){
+  this.setState({
+    daashBoard : true,
   })
   }
     }
@@ -58,7 +64,7 @@ if(login === "true"){
         {/* <button onClick={this.login}>Facebook L0gin</button> */}
          {!user && <Login  userLogin = {this. userLogin} />}
          {user && <Profile dashboard = {this. dashboard}/>}
-          {user &&  <Map/>}
+         { user &&  daashBoard && <Dashboard />}
       </div>
     );
   }

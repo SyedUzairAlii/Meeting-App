@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import firebase from '../../confic/firebase'
+
 // import firebase from './confic/firebase'; 
 class Image extends Component {
 
@@ -7,7 +9,8 @@ class Image extends Component {
     super(props)
     
     this.state = {
-      
+   
+
     }
     this.image1 = this.image1.bind(this)
     this.image2 = this.image2.bind(this)
@@ -62,7 +65,29 @@ image3() {
         fileReader3.readAsDataURL(imageFile3)
     }
 }
-  
+componentDidMount(){
+    
+}
+submit = () => {
+    this.props.pic()
+    const uid =   localStorage.getItem("uid")
+        //   console.log(this.state)
+          console.log(uid)
+const pictures = {
+   pic1 : this.state.image1,
+   pic2 : this.state.image2,
+   pic3 : this.state.image3,
+
+
+}
+    firebase.database().ref("/user/"+uid+"/pictures").push(pictures)
+
+    localStorage.setItem("images",true)
+    
+}
+
+
+
   render() {
     const { } = this.state;
     return (
@@ -71,7 +96,7 @@ image3() {
       1.<input type='file' name='file' onChange={() => {this.image1()}}/><br/>
       2.<input type='file' name='file' onChange={() => {this.image2()}}/><br/>
       3.<input type='file' name='file' onChange={() => {this.image3()}}/><br/>
-      <button >Next</button>
+      <button onClick={this.submit}>Next</button>
 
       </div>
     );
