@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import '../../App.css';
+import '../../App/App.css';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from '../../confic/firebase'
+import firebase from '../../confic/firebase';
 import './login.css';
+import History from '../../History/history';
+import ButtonAppBar from '../../container/container';
 class login extends Component {
 
     constructor() {
@@ -31,8 +33,8 @@ class login extends Component {
             // Avoid redirects after sign-in.
             signInSuccessWithAuthResult: (success) => { 
                 localStorage.setItem("login",true)
-
-                this.props.userLogin()
+                
+                // this.userLogin()
                 // console.log('sucess',success)
                 console.log('sucess',success.user.displayName)
                 console.log('sucess',success.user.email)
@@ -48,7 +50,9 @@ class login extends Component {
                     id : users.uid,
                 }
                 
+                
                 firebase.database().ref("/user/"+uid).set(userInfo)
+                History.push('/dashboard')
             }
             
         }
@@ -57,14 +61,8 @@ class login extends Component {
     render() {
         return (
             <div className="App">
-             <div className="main">
-                     <h1>Meeting App
-</h1>
-                      
-             </div>
-             <br/>
-             <br/>
-             <br/>
+    <ButtonAppBar name={'Meeting App'} >
+         </ButtonAppBar>
 
                      <div className="form">
                          Login here

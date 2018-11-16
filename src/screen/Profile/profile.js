@@ -3,13 +3,14 @@ import './App.css';
 import Cute from './cute.png'
 import firebase from '../../confic/firebase'
 import PropTypes from 'prop-types';
-// import classNames from 'classnames';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import { Checkbox, Button } from '@material-ui/core';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-// import PropTypes from 'prop-types'; 
+// import PropTypes from 'prop-types';
+import ButtonAppBar from '../../container/container' 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
         defaultZoom={12}
@@ -206,7 +207,7 @@ if(location === "true"){
                 images: [image1, image2, image3],
                 beverages: beverages,
                 timeDuration: checkTimeDuration,
-                
+                userUid : user,
             }
             firebase.database().ref('/user/' + user + '/profile/').update(obj)
                 .then(() => {
@@ -243,7 +244,7 @@ if(location === "true"){
                 console.log('submitted')
                 // this.props.profileUpdated()
             })
-            this.setState({ page : 5}) 
+            // this.setState({ page : 5}) 
             this.props.dashboard()
         localStorage.setItem("dashboard",true)
 
@@ -257,13 +258,9 @@ if(location === "true"){
         const { photo,page,data,timeDuration,beverages,checkTimeDuration,coords,} = this.state
         return (
             <div>
-               <div className="main">
-                    <h1>PROFILE</h1>
-                    <div className="image">
-                        <img src={photo ? photo : Cute} />
-                    </div>
-                </div>
-                <br />
+               <ButtonAppBar name={'Meeting App'} >
+         </ButtonAppBar>
+                
                 
                 
                 {page === 1 &&  <div>
