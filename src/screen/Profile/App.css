@@ -35,3 +35,15 @@
     width: 100%;
     border-radius: 50%;
 }
+.checkbox1{
+    width: 50%;
+    float:left;
+    
+
+}
+.checkbox{
+    width: 50%;
+    float:right;
+
+
+}

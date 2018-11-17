@@ -11,7 +11,7 @@ import Status  from '../screen/status/status'
 import './routes.css'
 import  Request from '../screen/MeetingRequest/request'
 import { RequestMeeting } from '../store/action/action'
-
+import EditeProfile from '../screen/editeProfile/editeProfile'
 class Routers extends Component {
 
     componentWillMount() {
@@ -38,6 +38,7 @@ class Routers extends Component {
                     <Route exact path='/direction' component = {Direction}/>
                     <Route exact path='/status' component = {Status}/>
                     <Route exact path='/MeetingRequest' component = {Request}/>
+                    <Route exact path='/EditeProfile' component = {EditeProfile}/>
 
 
                 

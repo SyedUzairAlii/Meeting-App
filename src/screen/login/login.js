@@ -51,7 +51,7 @@ class login extends Component {
                 }
                 
                 
-                firebase.database().ref("/user/"+uid).set(userInfo)
+                firebase.database().ref("/user/"+uid).update(userInfo)
                 History.push('/dashboard')
             }
             

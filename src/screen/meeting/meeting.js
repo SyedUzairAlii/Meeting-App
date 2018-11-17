@@ -7,7 +7,7 @@ import Axios from 'axios'
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import swal from 'sweetalert2'
-
+import GetDirection from './direction'
 class Meeting extends Component {
     constructor() {
         super()
@@ -18,7 +18,9 @@ class Meeting extends Component {
             searchQuery: '',
             setTime: false,
             date: '2018-05-24',
-            time: '07:30'
+            time: '07:30',
+            dataUser: {},
+            directionn: false,
         }
     }
     componentWillMount() {
@@ -34,8 +36,11 @@ class Meeting extends Component {
     }
 
     componentDidMount() {
+        // this.setState({dataUser : this.props.location.state})
         const { location, beverages } = this.props.location.state
-        console.log(this.props.location.state.statee, 'user data')
+        console.log(this.props.location.state, 'user data')
+        // console.log(this.state.dataUser, 'state')
+
         const CLIENT_ID = '5XDIYAOKVXSMUUWASBZIEZNUF2YMAZLCM2OLEJMCLELN5SA5'
         const CLIENT_SECRET = 'FVI4W3SKKUSDHGW4HNRWPVQDXYV25BGJGPXFRFANGQ43IS5X'
         const LATITUDE = location.latitude
@@ -85,7 +90,7 @@ class Meeting extends Component {
         }
         console.log(meetingPlace, 'meeting place')
         console.log(this.props.location.state, 'user data')
-        this.setState({ meetingPlace, setTime: true })
+        this.setState({ meetingPlace, setTime: true, directionn: false })
     }
 
     sendRequest() {
@@ -101,22 +106,35 @@ class Meeting extends Component {
             request: 'pending'
         }
         console.log(request)
-        swal({
-            title: 'Are you sure?',
-            text: `You want to send request to ${this.props.location.state.name}`,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            if (result.value) {
-                swal({
-                    onOpen: () => {
-                        swal.showLoading()
-                    }
-                })
-                firebase.database().ref('/meeting/' + userId + '/').push(request)
+        // swal({
+        //     title: 'Are you sure?',
+        //     text: `You want to send request to ${this.props.location.state.name}`,
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes'
+        // }).then((result) => {
+        //     if (result.value) {
+        //         swal({
+        //             onOpen: () => {
+        //                 swal.showLoading()
+        //             }
+        //         })
+        //         firebase.database().ref('/meeting/' + userId + '/').push(request)
+        //             .then(() => {
+        //                 swal({
+        //                     position: 'center',
+        //                     type: 'success',
+        //                     title: 'Request Sent',
+        //                     showConfirmButton: false,
+        //                     timer: 1500
+        //                 })
+        //                 History.push('/status')
+        //             })
+            // }
+        // })
+        firebase.database().ref('/meeting/' + userId + '/').push(request)
                     .then(() => {
                         swal({
                             position: 'center',
@@ -127,8 +145,6 @@ class Meeting extends Component {
                         })
                         History.push('/status')
                     })
-            }
-        })
     }
     getDirection(place) {
         // console.log(place)
@@ -142,57 +158,32 @@ class Meeting extends Component {
             address: venue.location.address ? venue.location.address : 'not available'
         }
         console.log(meetingPlace, 'meeting place')
-        console.log(this.props.location.state.state, 'user data')
-        History.push({
-            pathname: '/direction',
-            state: {
-                userData: this.props.location.state,
-                meetingLocation: meetingPlace,
-                // state :this.props.location.state,
-            }
-        })
+        console.log(this.props.location.state, 'user data')
+        // History.push({
+        //     pathname: '/direction',
+        //     state: {
+        //         userData: this.props.location.state,
+        //         meetingLocation: meetingPlace,
+        //         // state :this.props.location.state,
+        //     }
+        // })
+        this.setState({ directionn: true, meetingPlace })
 
     }
 
     render() {
-        const { recommended, searchQuery, search, setTime, date, time, Index2, Index1 } = this.state
+        const { location } = this.props;
+        const { meetingPlace, recommended, searchQuery, search, setTime, date, time, Index2, Index1, directionn } = this.state
         return (
             <div>
-         <ButtonAppBar name={'Meeting App'} >
-         </ButtonAppBar>
-             <div>  {
+                <ButtonAppBar name={'Meeting App'} >
+                </ButtonAppBar>
+                <div>  {
                     !setTime &&
                     <div>
-                        <h1>Search Meeting Place</h1>
-                        {
-                            !searchQuery &&
-                            <div>
-                                <h2>Recommended Places</h2>
-                                <div className='recommend-places'>
+                        <h1> Meeting Places</h1>
 
-                                    {
-                                        recommended.map((items, index) => {
-                                            return (
-                                                index <= 2 &&
-                                                <div key={index} onClick={() => this.setState({Index1: index})}>
-                                                    {items.venue.name}
 
-                                                    {
-                                                        Index1 === index && 
-                                                        <span >
-                                                            <Button variant="outlined" color="secondary" onClick={() => this.getDirection(items)}>  Get Direction   </Button>
-                                                            <Button variant="contained" color="primary" onClick={() => this.setPlace(items)}> NEXT  </Button>
-                                                            </span>
-
-                                                    }
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                                <h3>OR</h3>
-                            </div>
-                        }
                         <div className={'search'}>
                             <div>
                                 {/* <TextField
@@ -206,13 +197,13 @@ class Meeting extends Component {
                                     onChange={(e) => this.search(e.target.value)}
                                 /> */}
                                 <TextField
-          id="standard-with-placeholder"
-          label="Search Here"
-          placeholder="Search place here..."
-        //   className={classes.textField}
-          margin="normal"
-          onChange={(e) => this.search(e.target.value)}
-        />
+                                    id="standard-with-placeholder"
+                                    label="Search Here"
+                                    placeholder="Search place here..."
+                                    //   className={classes.textField}
+                                    margin="normal"
+                                    onChange={(e) => this.search(e.target.value)}
+                                />
                             </div>
                             <hr />
                         </div>
@@ -222,62 +213,96 @@ class Meeting extends Component {
                                 {
                                     search.map((items, index) => {
                                         return (
-                                            <div key={index} onClick={() => this.setState({Index2: index})}>
+                                            <div key={index} onClick={() => this.setState({ Index2: index })}>
                                                 {items.venue.name}
-                                            
-    {
-        Index2 === index && 
-        <span >
-            <Button variant="outlined" color="secondary" onClick={() => this.getDirection(items)}>  Get Direction   </Button>
-            <Button variant="contained" color="primary" onClick={() => this.setPlace(items)}> NEXT  </Button>
-            </span>
 
-    }
-    </div>
+                                                {
+                                                    Index2 === index &&
+                                                    <span >
+                                                        <Button variant="outlined" color="secondary" onClick={() => this.getDirection(items)}>  Get Direction   </Button>
+                                                        <Button variant="contained" color="primary" onClick={() => this.setPlace(items)}> NEXT  </Button>
+                                                    </span>
+
+                                                }
+                                            </div>
                                         )
                                     })
                                 }
                             </div>
                         }
+                        {
+                            !searchQuery &&
+                            <div>
+                                {/* <h2>Recommended Places</h2> */}
+                                <div className='recommend-places'>
+
+                                    {
+                                        recommended.map((items, index) => {
+                                            return (
+                                                index <= 2 &&
+                                                <div key={index} onClick={() => this.setState({ Index1: index })}>
+                                                    {items.venue.name}
+                                                    <hr />
+                                                    {
+                                                        Index1 === index &&
+                                                        <span >
+                                                            <Button variant="outlined" color="secondary" onClick={() => this.getDirection(items)}>  Get Direction   </Button>
+                                                            <Button variant="outlined" color="secondary" onClick={() => this.setPlace(items)}> NEXT  </Button>
+                                                        </span>
+
+                                                    }
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                                {/* <h3>OR</h3> */}
+                            </div>
+                        }
+
                     </div>
                 }
-                {
-                    setTime &&
-                    <div>
-                        <h1>Set Date and Time</h1>
-                        <h4>Date</h4>
-                        <TextField
-                            id="date"
-                            label="Select Date"
-                            type="date"
-                            style={{ width: 200 }}
-                            defaultValue={date}
-                            onChange={(e) => this.setState({ date: e.target.value })}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <h4>Time</h4>
-                        <TextField
-                            id="time"
-                            label="Select Time"
-                            type="time"
-                            style={{ width: 200 }}
-                            defaultValue={time}
-                            onChange={(e) => console.log(e.target.value)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            inputProps={{
-                                step: 300, // 5 min
-                            }}
-                        />
-                        <h3>
-                            <Button color='primary' onClick={() => this.sendRequest()} variant={'contained'}>Send</Button>
-                        </h3>
-                    </div>
-                }
-               </div>
+
+                    {directionn && <GetDirection meetingLocation={meetingPlace} userData={location.state} />}
+
+
+                    {
+                        setTime &&
+                        <div>
+                            <h1>Set </h1>
+                            <h4>Date</h4>
+                            <TextField
+                                id="date"
+                                label="Select Date"
+                                type="date"
+                                style={{ width: 200 }}
+                                // defaultValue={date}
+                                onChange={(e) => this.setState({ date: e.target.value })}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <h4>Time</h4>
+                            <TextField
+                                id="time"
+                                label="Select Time"
+                                type="time"
+                                style={{ width: 200 }}
+                                // defaultValue={time}
+                                onChange={(e) => console.log(e.target.value)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                inputProps={{
+                                    step: 300, // 5 min
+                                }}
+                            />
+                            <h3>
+                                <Button color='primary' onClick={() => this.sendRequest()} variant={'outlined'}>Send</Button>
+                            </h3>
+                        </div>
+                    }
+                </div>
             </div>
 
         );

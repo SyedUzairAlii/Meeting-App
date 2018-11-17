@@ -11,6 +11,20 @@ import { Checkbox, Button } from '@material-ui/core';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 // import PropTypes from 'prop-types';
 import ButtonAppBar from '../../container/container' 
+// import PropTypes from 'prop-types';
+// import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+// import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+// import PropTypes from 'prop-types';
+// import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+// import Typography from '@material-ui/core/Typography';
+
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
         defaultZoom={12}
@@ -22,6 +36,28 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
             }} />}
     </GoogleMap>
 ))
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+});
+
+
+
+
 class Profile extends Component {
 
     constructor() {
@@ -35,7 +71,8 @@ class Profile extends Component {
             timeDuration: ['20 min', '60 min', '120 min'],
             beverages: [],
             checkTimeDuration: [],
-            coords: null
+            coords: null,
+            value : 0,
         }
         this.nickname = this.nickname.bind(this)
         this.number= this.number.bind(this)   
@@ -45,13 +82,14 @@ class Profile extends Component {
         this.image3 = this.image3.bind(this)
         this.next = this.next.bind(this)
         this.setLatlng = this.setLatlng.bind(this)
+        this.value = this.value.bind(this)  
     }
 
     componentWillMount() {
         const userUid = localStorage.getItem("uid");
         firebase.database().ref('/user/' + userUid).on('value', (snapshot) => {
             // console.log(snapshot.val().photo)
-            this.setState({ photo: snapshot.val().photo })
+            // this.setState({ photo: snapshot.val().photo })
         })
         const nameField =  localStorage.getItem("nameField");
 if(nameField === "true"){
@@ -89,11 +127,11 @@ if(location === "true"){
         // }
     // const uid =   localStorage.getItem("uid")
     // firebase.database().ref("/user/"+uid+"/number").push(number)
-        console.log(this.state.nickname)
-        console.log(this.state.number)
-        localStorage.setItem("nameField",true)
+        // console.log(this.state.nickname)
+        // console.log(this.state.number)
+        // localStorage.setItem("nameField",true)
         this.setState({
-            page: 2,
+            value: 1,
             
         })
     }
@@ -110,6 +148,9 @@ if(location === "true"){
             
     //     })
     // }
+    handleChange = (event, value) => {
+        this.setState({ value });
+      };
     image1() {
         var imageFile = document.getElementsByName('file')[0].files[0];
         // console.log(imageFile)
@@ -162,7 +203,7 @@ if(location === "true"){
     submit = () => {
            
         this.setState({
-            page : 3,
+            value : 2,
           })
         localStorage.setItem("images",true)
         
@@ -214,6 +255,7 @@ if(location === "true"){
                     console.log('profile added')
                     this.setState({ page: 4})
                 })
+                this.setState({value:3})
         }
     }
     componentDidMount() {
@@ -253,17 +295,30 @@ if(location === "true"){
     setLatlng(latitude, longitude) {
         this.setState({ coords: { latitude, longitude } })
     }
-
+    
+value(){
+    this.setState( {value : 3 })
+}    
     render() {
+        const { classes } = this.props;
+        const { value } = this.state;
         const { photo,page,data,timeDuration,beverages,checkTimeDuration,coords,} = this.state
         return (
             <div>
                <ButtonAppBar name={'Meeting App'} >
          </ButtonAppBar>
                 
-                
-                
-                {page === 1 &&  <div>
+         <div >
+        <AppBar position="static">
+          <Tabs value={value} onChange={this.handleChange}>
+            <Tab label="Item One" />
+            <Tab label="Item Two" />
+            <Tab label="Item Three" />
+            <Tab label="Item four" />
+
+          </Tabs>
+        </AppBar>
+        {value === 0 && <TabContainer><div>
                         <h3>Enter your nickname:</h3> 
                         <TextField
           id="standard-name"
@@ -291,9 +346,8 @@ if(location === "true"){
                   
                     <br />
                     <button onClick={this.namee}>Next</button>
-                </div>}
-
-{ page === 2 && <div> 
+                </div></TabContainer>}
+        {value === 1 && <TabContainer><div> 
 
 <h1>upload Image</h1>
       1.<input type='file' name='file' onChange={() => {this.image1()}}/><br/>
@@ -301,39 +355,77 @@ if(location === "true"){
       3.<input type='file' name='file' onChange={() => {this.image3()}}/><br/>
       <button onClick={this.submit}>Next</button>
 
-</div>}
-
-{
-    page === 3 &&
-    <div>
-        <h3>Choose Beverages</h3>
+</div>}</TabContainer>}
+        {value === 2 && <TabContainer> <div className='checkbox'>
+        <Card >
+      <CardContent>
+        {/* <Typography color="textSecondary" gutterBottom>
+          Word of the Day
+        </Typography> */}
+        <Typography variant="h5" component="h2">
+        Choose Beverages
+        </Typography>
+        {/* <Typography  color="textSecondary">
+          adjective
+        </Typography> */}
+        <Typography component="p">
         {
             data.map(x => {
                 return (
-                    <div className='checkbox'>
+                    <div >
                         <Checkbox label={x} key={x.toString()} onChange={() => this.handleCheck(x)} />
                         <p>{x}</p>
+                        
                     </div>
                 )
             })
         }
-        <h3>Duration Of Meeting</h3>
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
+       
+        </div>
+        <div className='checkbox1'>
+        
+        <Card >
+      <CardContent>
+        {/* <Typography color="textSecondary" gutterBottom>
+          Word of the Day
+        </Typography> */}
+        <Typography variant="h5" component="h2">
+        Duration Of Meeting
+        </Typography>
+        {/* <Typography  color="textSecondary">
+          adjective
+        </Typography> */}
+        <Typography component="p">
         {
             timeDuration.map(items => {
                 return (
-                    <div className='checkbox'>
+                    <div >
                         <Checkbox label={items} key={items.toString()} onChange={() => this.handleCheckTime(items)} />
                         <p>{items}</p>
                     </div>
                 )
             })
         }
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
+        
+       
         <Button color='primary' onClick={() => this.next()} variant={'contained'} >Next</Button>
     </div>
-}
-{
-    page === 4 && 
-    <div>
+      {/* <button onClick={this.value}>Next</button> */}
+
+        </TabContainer>}
+        {value === 3 && <TabContainer><div>
                         <h2>Set Your Location</h2>
                         {
                             coords &&
@@ -350,7 +442,18 @@ if(location === "true"){
                          }
                         <Button color='primary' onClick={() => this.nextPage3()} variant={'contained'} >Done</Button>
                     </div>
-}
+
+            </TabContainer>}
+
+      </div>
+     
+                
+              
+
+
+
+
+
             </div>
         )
     }
