@@ -11,6 +11,7 @@ import swal from 'sweetalert2'
 import Profile from '../Profile/profile';
 import History from '../../History/history'
 import ButtonAppBar from '../../container/container'
+import PrimarySearchAppBar from'../../contaniner2/contaniner'
 import RequestCard from '../../component/requestCard/card'
 import Icon from '@material-ui/core/Icon';
 class status extends Component{
@@ -137,8 +138,8 @@ render()
     const{users,data,noti } = this.state
     return(
 <div>
-<ButtonAppBar name={'Meeting App'} >
-         </ButtonAppBar>
+<PrimarySearchAppBar name={'Meeting App'} >
+         </PrimarySearchAppBar>
  {data&&
           <RequestCard users={users} />
         }
@@ -161,3 +162,38 @@ render()
 
 
 export default status
+// componentDidMount(){
+//   let { users } = this.state
+//   const user = localStorage.getItem('uid')
+
+//   firebase.database().ref('/user/' + user  + "").on('value', (snapShot) => {
+//     for (var key in snapShot.val()) {
+//         console.log(snapShot.val())
+      
+
+       
+//           const obj = {
+           
+//             name: snapShot.val().profile.name,
+//             number: snapShot.val().profile.number,
+//             beverages : snapShot.val().profile.beverages,
+//             Time : snapShot.val().profile.timeDuration,
+
+//           }
+//           //     // console.log(snaps.val(), 'userdata')
+//           //     // console.log(key, 'key')
+//           //     // console.log(user, 'user')
+//               users.push(obj)
+//           //     this.setState({ data : true  })
+//           //   }
+//           // })
+          
+          
+//           // }
+          
+//           console.log(obj, 'userdata')
+//       }
+//   })
+
+  
+// }
