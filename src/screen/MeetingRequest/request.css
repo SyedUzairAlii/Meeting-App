@@ -5,13 +5,15 @@
     /* border: 1px solid #d9cdcd; */
 }
 .div1{
-    border: 1px solid #d4f4e6;
+    border: 3px solid #4d4d61;
     padding: 10px;
     margin: 10px;
     margin-top: 2em;
     border-radius: 15px;
-    /* background-color: #d4f4e6; */
-    box-shadow: 0px 0px 5px 1px black;
+    /* background-color: #28b4e2; */
+
+    background-color: #daeafa;
+    box-shadow: 0px 0px 5px 1px rgb(5, 0, 0);
 }
 .profile-pic>div:first-child{
     flex-basis: 100%;
@@ -22,7 +24,7 @@
     margin-left: 11px;
 }
 .user-pics>div:first-child{
-    position: absolute;
+    /* position: absolute; */
     z-index: 2;
     left: 82px;
     /* background-color: #28b4e2; */
@@ -36,10 +38,16 @@
     width: 80px;
     height: 80px;
     padding: 7px;
-    border: 1px solid antiquewhite;
+    /* border: 1px solid antiquewhite; */
     overflow: hidden;
     border-radius: 50%;
-    background-color: lightblue;
+    /* background-color: lightblue; */
+}
+.image12{
+    width: 80px;
+    height: 80px;
+    /* background-color: lightblue; */
+
 }
 .user-pics>div>img{
     width: 80px;
@@ -65,6 +73,10 @@
 .meeting-details{
     padding: 5px;
     border: 1px solid #d9cdcd;
+    border-radius: 30%;
+    background-color: #93fdf4;
+
+
 }
 .meeting-details>div{
     /* border: 1px solid black; */
