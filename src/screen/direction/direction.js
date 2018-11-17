@@ -69,11 +69,11 @@ class Directions extends Component {
     next() {
         const { userData, meetingLocation } = this.props.location.state
         History.push({
-            pathname: '/meeting',
-            state: {
-                state: userData,
-                meetingLocation: meetingLocation
-            }
+            pathname: '/status',
+            // state: {
+            //     state: userData,
+            //     meetingLocation: meetingLocation
+            // }
         })
     }
 
